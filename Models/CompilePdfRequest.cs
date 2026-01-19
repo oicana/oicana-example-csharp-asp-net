@@ -1,4 +1,4 @@
-using Oicana.Inputs;
+using System.Text.Json.Nodes;
 
 namespace Oicana.Example.Models;
 
@@ -7,71 +7,53 @@ namespace Oicana.Example.Models;
 /// </summary>
 /// <example>
 /// {
-///    "jsonInputs": [
-///         {
-///             "key": "input",
-///             "value": {
-///                "description": "from sample data",
-///                "rows": [
-///                    {
-///                        "name": "Frank",
-///                        "one": "first",
-///                        "two": "second",
-///                        "three": "third"
-///                    },
-///                    {
-///                        "name": "John",
-///                        "one": "first_john",
-///                        "two": "second_john",
-///                        "three": "third_john"
-///                    }
-///                ]
-///             }
+///    "jsonInputs": {
+///         "input": {
+///            "description": "from sample data",
+///            "rows": [
+///                {
+///                    "name": "Frank",
+///                    "one": "first",
+///                    "two": "second",
+///                    "three": "third"
+///                }
+///            ]
 ///         }
-///     ]
+///     },
+///     "blobInputs": {
+///         "logo": "00000000-0000-0000-0000-000000000000"
+///     }
 /// }
 /// </example>
 public class CompilePdfRequest
 {
     /// <summary>
-    /// Input json to compile the template with
+    /// Input json to compile the template with (key -> JsonNode)
     /// </summary>
     /// <example>
-    /// [
-    ///     {
-    ///         "key": "data",
-    ///         "value": {
-    ///            "description": "from sample data",
-    ///            "rows": [
-    ///                {
-    ///                    "name": "Frank",
-    ///                    "one": "first",
-    ///                    "two": "second",
-    ///                    "three": "third"
-    ///                },
-    ///                {
-    ///                    "name": "John",
-    ///                    "one": "first_john",
-    ///                    "two": "second_john",
-    ///                    "three": "third_john"
-    ///                }
-    ///            ]
-    ///         }
+    /// {
+    ///     "data": {
+    ///        "description": "from sample data",
+    ///        "rows": [
+    ///            {
+    ///                "name": "Frank",
+    ///                "one": "first",
+    ///                "two": "second",
+    ///                "three": "third"
+    ///            }
+    ///        ]
     ///     }
-    /// ]
+    /// }
     /// </example>
-    public required IList<TemplateJsonInput> JsonInputs { get; init; }
+    public required IDictionary<string, JsonNode> JsonInputs { get; init; }
 
     /// <summary>
-    /// 
+    /// Blob inputs referencing stored blobs (key -> blob ID)
     /// </summary>
     /// <example>
-    /// [
-    ///     {
-    ///         "key": "logo",
-    ///         "blobId": "00000000-0000-0000-0000-000000000000"
-    ///     }
-    /// ]
+    /// {
+    ///     "logo": "00000000-0000-0000-0000-000000000000"
+    /// }
     /// </example>
-    public required IList<StoredBlobInput> BlobInputs { get; init; }
+    public required IDictionary<string, Guid> BlobInputs { get; init; }
 }

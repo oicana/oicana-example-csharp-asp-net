@@ -13,7 +13,7 @@
             Uncomment below to use the local Oicana integration.
             This requires you to check out oicana next to this example repository.
          -->
-        <!--<DefineConstants>$(DefineConstants);USE_LOCAL_OICANA</DefineConstants>-->
+        <DefineConstants>$(DefineConstants);USE_LOCAL_OICANA</DefineConstants>
     </PropertyGroup>
 
     <Choose>

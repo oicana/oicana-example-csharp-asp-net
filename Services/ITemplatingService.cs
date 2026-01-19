@@ -1,6 +1,5 @@
+using System.Text.Json.Nodes;
 using Oicana.Example.Controllers;
-using Oicana.Example.Models;
-using Oicana.Inputs;
 
 namespace Oicana.Example.Services;
 
@@ -13,19 +12,19 @@ public interface ITemplatingService
     /// Compile an Oicana template with input to a PDF.
     /// </summary>
     /// <param name="templateId">This id has to be registered in the <see cref="Oicana.Template.OicanaService"/></param>
-    /// <param name="jsonInput">Json inputs to pass into the template</param>
-    /// <param name="storedBlobInputs">Blob inputs to pass into the template</param>
+    /// <param name="jsonInput">Json inputs to pass into the template (key -> JsonNode)</param>
+    /// <param name="storedBlobInputs">Blob inputs to pass into the template (key -> blob ID)</param>
     /// <returns>A stream containing a PDF export of the template or <see langword="null"/> if the template is not registered</returns>
-    Task<Stream?> Compile(string templateId, IList<TemplateJsonInput> jsonInput, IList<StoredBlobInput> storedBlobInputs);
+    Task<Stream?> Compile(string templateId, IDictionary<string, JsonNode> jsonInput, IDictionary<string, Guid> storedBlobInputs);
 
     /// <summary>
     /// Preview an Oicana template with input as a PNG image.
     /// </summary>
     /// <param name="templateId">This id has to be registered in the <see cref="Oicana.Template.OicanaService"/></param>
-    /// <param name="jsonInput">Json inputs to pass into the template</param>
-    /// <param name="blobInputs">Blob inputs to pass into the template</param>
+    /// <param name="jsonInput">Json inputs to pass into the template (key -> JsonNode)</param>
+    /// <param name="storedBlobInputs">Blob inputs to pass into the template (key -> blob ID)</param>
     /// <returns>A stream containing a PNG image of the template or <see langword="null"/> if the template is not registered</returns>
-    Task<Stream?> Preview(string templateId, IList<TemplateJsonInput> jsonInput, IList<StoredBlobInput> blobInputs);
+    Task<Stream?> Preview(string templateId, IDictionary<string, JsonNode> jsonInput, IDictionary<string, Guid> storedBlobInputs);
 
     /// <summary>
     /// Remove a registered Oicana template from this service.

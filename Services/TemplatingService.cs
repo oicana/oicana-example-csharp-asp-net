@@ -1,5 +1,5 @@
+using System.Text.Json.Nodes;
 using Oicana.Config;
-using Oicana.Example.Models;
 using Oicana.Inputs;
 using Oicana.Template;
 
@@ -9,7 +9,7 @@ namespace Oicana.Example.Services;
 public class TemplatingService(IOicanaService oicanaService, IStoredBlobService storedBlobService, ILogger<TemplatingService> logger) : ITemplatingService
 {
     /// <inheritdoc />
-    public async Task<Stream?> Compile(string templateId, IList<TemplateJsonInput> jsonInput, IList<StoredBlobInput> storedBlobInputs)
+    public async Task<Stream?> Compile(string templateId, IDictionary<string, JsonNode> jsonInput, IDictionary<string, Guid> storedBlobInputs)
     {
         var template = oicanaService.GetTemplate(templateId);
         if (template == null)
@@ -22,7 +22,7 @@ public class TemplatingService(IOicanaService oicanaService, IStoredBlobService 
     }
 
     /// <inheritdoc />
-    public async Task<Stream?> Preview(string templateId, IList<TemplateJsonInput> jsonInput, IList<StoredBlobInput> storedBlobInputs)
+    public async Task<Stream?> Preview(string templateId, IDictionary<string, JsonNode> jsonInput, IDictionary<string, Guid> storedBlobInputs)
     {
         var template = oicanaService.GetTemplate(templateId);
         if (template == null)
@@ -41,18 +41,18 @@ public class TemplatingService(IOicanaService oicanaService, IStoredBlobService 
         return template != null;
     }
 
-    private async Task<IList<TemplateBlobInput>> LoadBlobInputs(IList<StoredBlobInput> storedBlobInputs)
+    private async Task<IDictionary<string, BlobInput>> LoadBlobInputs(IDictionary<string, Guid> storedBlobInputs)
     {
-        var blobInputs = new List<TemplateBlobInput>();
-        foreach (var storedBlobInput in storedBlobInputs)
+        var blobInputs = new Dictionary<string, BlobInput>();
+        foreach (var (key, blobId) in storedBlobInputs)
         {
-            var blob = await storedBlobService.RetrieveBlob(storedBlobInput.BlobId);
+            var blob = await storedBlobService.RetrieveBlob(blobId);
             if (blob == null)
             {
-                logger.LogWarning($"The stored blob {storedBlobInput.BlobId} could not be loaded.");
+                logger.LogWarning("The stored blob {BlobId} could not be loaded.", blobId);
                 continue;
             }
-            blobInputs.Add(new TemplateBlobInput(storedBlobInput.Key, blob));
+            blobInputs[key] = new BlobInput(blob);
         }
 
         return blobInputs;

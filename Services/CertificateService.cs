@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using Oicana.Config;
 using Oicana.Example.Models;
 using Oicana.Inputs;
@@ -30,10 +31,12 @@ public class CertificateService(IOicanaService oicanaService, ILogger<Certificat
 
             // "certificate" is the key defined in the template
             // See https://github.com/oicana/oicana-example-templates/blob/672967c5b667dfa845228cac443d32b8b3c7ae0a/templates/certificate/typst.toml#L12
-            // We can use `TemplateJsonInput.From` here, because `CreateCertificate` serializes into a valid value for the certificate input
             // In a production system you most likely want separate types as API Model and for the input representation
-            var input = TemplateJsonInput.From("certificate", request, new JsonSerializerOptions(JsonSerializerDefaults.Web));
-            var result = await Task.Run<Stream?>(() => template.Compile([input], [], ExportOptions.Pdf(), new CompilationOptions(CompilationMode.Production)));
+            var jsonInputs = new Dictionary<string, JsonNode>
+            {
+                ["certificate"] = JsonSerializer.SerializeToNode(request, new JsonSerializerOptions(JsonSerializerDefaults.Web))!
+            };
+            var result = await Task.Run<Stream?>(() => template.Compile(jsonInputs, new Dictionary<string, BlobInput>(), ExportOptions.Pdf(), new CompilationOptions(CompilationMode.Production)));
             watch.Stop();
 
             logger.LogInformation("Certificate generated in {ElapsedMilliseconds}ms", watch.ElapsedMilliseconds);
