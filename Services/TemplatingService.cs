@@ -3,14 +3,17 @@ using Oicana.Config;
 using Oicana.Inputs;
 using Oicana.Template;
 
+using Oicana.Example.Models;
+
 namespace Oicana.Example.Services;
 
 /// <inheritdoc />
 public class TemplatingService(IOicanaService oicanaService, IStoredBlobService storedBlobService, ILogger<TemplatingService> logger) : ITemplatingService
 {
     /// <inheritdoc />
-    public async Task<Stream?> Compile(string templateId, IDictionary<string, JsonNode> jsonInput, IDictionary<string, Guid> storedBlobInputs)
+    public async Task<Stream?> Compile(string templateId, IList<JsonInputDto> jsonInputList, IList<BlobInputDto> storedBlobInputs)
     {
+        var jsonInput = jsonInputList.ToDictionary(i => i.Key, i => i.Value);
         var template = oicanaService.GetTemplate(templateId);
         if (template == null)
         {
@@ -22,8 +25,9 @@ public class TemplatingService(IOicanaService oicanaService, IStoredBlobService 
     }
 
     /// <inheritdoc />
-    public async Task<Stream?> Preview(string templateId, IDictionary<string, JsonNode> jsonInput, IDictionary<string, Guid> storedBlobInputs)
+    public async Task<Stream?> Preview(string templateId, IList<JsonInputDto> jsonInputList, IList<BlobInputDto> storedBlobInputs)
     {
+        var jsonInput = jsonInputList.ToDictionary(i => i.Key, i => i.Value);
         var template = oicanaService.GetTemplate(templateId);
         if (template == null)
         {
@@ -41,18 +45,18 @@ public class TemplatingService(IOicanaService oicanaService, IStoredBlobService 
         return template != null;
     }
 
-    private async Task<IDictionary<string, BlobInput>> LoadBlobInputs(IDictionary<string, Guid> storedBlobInputs)
+    private async Task<IDictionary<string, BlobInput>> LoadBlobInputs(IList<BlobInputDto> storedBlobInputs)
     {
         var blobInputs = new Dictionary<string, BlobInput>();
-        foreach (var (key, blobId) in storedBlobInputs)
+        foreach (var dto in storedBlobInputs)
         {
-            var blob = await storedBlobService.RetrieveBlob(blobId);
+            var blob = await storedBlobService.RetrieveBlob(dto.BlobId);
             if (blob == null)
             {
-                logger.LogWarning("The stored blob {BlobId} could not be loaded.", blobId);
+                logger.LogWarning("The stored blob {BlobId} could not be loaded.", dto.BlobId);
                 continue;
             }
-            blobInputs[key] = new BlobInput(blob);
+            blobInputs[dto.Key] = new BlobInput(blob);
         }
 
         return blobInputs;

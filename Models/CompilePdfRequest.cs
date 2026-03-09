@@ -7,53 +7,71 @@ namespace Oicana.Example.Models;
 /// </summary>
 /// <example>
 /// {
-///    "jsonInputs": {
-///         "input": {
-///            "description": "from sample data",
-///            "rows": [
-///                {
-///                    "name": "Frank",
-///                    "one": "first",
-///                    "two": "second",
-///                    "three": "third"
-///                }
-///            ]
+///    "jsonInputs": [
+///         {
+///             "key": "input",
+///             "value": {
+///                "description": "from sample data",
+///                "rows": [
+///                    {
+///                        "name": "Frank",
+///                        "one": "first",
+///                        "two": "second",
+///                        "three": "third"
+///                    }
+///                ]
+///             }
 ///         }
-///     },
-///     "blobInputs": {
-///         "logo": "00000000-0000-0000-0000-000000000000"
-///     }
+///     ],
+///     "blobInputs": [
+///         {
+///             "key": "logo",
+///             "blobId": "00000000-0000-0000-0000-000000000000"
+///         }
+///     ]
 /// }
 /// </example>
 public class CompilePdfRequest
 {
     /// <summary>
-    /// Input json to compile the template with (key -> JsonNode)
+    /// Input json to compile the template with
     /// </summary>
-    /// <example>
-    /// {
-    ///     "data": {
-    ///        "description": "from sample data",
-    ///        "rows": [
-    ///            {
-    ///                "name": "Frank",
-    ///                "one": "first",
-    ///                "two": "second",
-    ///                "three": "third"
-    ///            }
-    ///        ]
-    ///     }
-    /// }
-    /// </example>
-    public required IDictionary<string, JsonNode> JsonInputs { get; init; }
+    public required IList<JsonInputDto> JsonInputs { get; init; }
 
     /// <summary>
-    /// Blob inputs referencing stored blobs (key -> blob ID)
+    /// Blob inputs referencing stored blobs
     /// </summary>
-    /// <example>
-    /// {
-    ///     "logo": "00000000-0000-0000-0000-000000000000"
-    /// }
-    /// </example>
-    public required IDictionary<string, Guid> BlobInputs { get; init; }
+    public required IList<BlobInputDto> BlobInputs { get; init; }
+}
+
+/// <summary>
+/// A named JSON input for template compilation
+/// </summary>
+public class JsonInputDto
+{
+    /// <summary>
+    /// The key of the json input
+    /// </summary>
+    public required string Key { get; init; }
+
+    /// <summary>
+    /// The JSON value for this input
+    /// </summary>
+    public required JsonNode Value { get; init; }
+}
+
+/// <summary>
+/// A named blob input referencing a stored blob
+/// </summary>
+public class BlobInputDto
+{
+    /// <summary>
+    /// The key of the blob input
+    /// </summary>
+    public required string Key { get; init; }
+
+    /// <summary>
+    /// Identifier of the blob file
+    /// </summary>
+    public required Guid BlobId { get; init; }
 }
