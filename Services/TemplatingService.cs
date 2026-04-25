@@ -21,7 +21,7 @@ public class TemplatingService(IOicanaService oicanaService, IStoredBlobService 
         }
         var blobInputs = await LoadBlobInputs(storedBlobInputs);
 
-        return await Task.Run<Stream?>(() => template.Compile(jsonInput, blobInputs, ExportOptions.Pdf(), new CompilationOptions(CompilationMode.Production)));
+        return await Task.Run<Stream?>(() => template.Compile(jsonInput, blobInputs, ExportFormat.Pdf(), new CompilationOptions(CompilationMode.Production)));
     }
 
     /// <inheritdoc />
@@ -35,7 +35,7 @@ public class TemplatingService(IOicanaService oicanaService, IStoredBlobService 
         }
         var blobInputs = await LoadBlobInputs(storedBlobInputs);
 
-        return await Task.Run<Stream?>(() => template.Compile(jsonInput, blobInputs, ExportOptions.Png(1.0f), new CompilationOptions(CompilationMode.Production)));
+        return await Task.Run<Stream?>(() => template.Compile(jsonInput, blobInputs, ExportFormat.Png(1.0f), new CompilationOptions(CompilationMode.Production)));
     }
 
     /// <inheritdoc />

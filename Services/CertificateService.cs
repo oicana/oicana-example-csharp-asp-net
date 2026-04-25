@@ -36,7 +36,7 @@ public class CertificateService(IOicanaService oicanaService, ILogger<Certificat
             {
                 ["certificate"] = JsonSerializer.SerializeToNode(request, new JsonSerializerOptions(JsonSerializerDefaults.Web))!
             };
-            var result = await Task.Run<Stream?>(() => template.Compile(jsonInputs, new Dictionary<string, BlobInput>(), ExportOptions.Pdf(), new CompilationOptions(CompilationMode.Production)));
+            var result = await Task.Run<Stream?>(() => template.Compile(jsonInputs, new Dictionary<string, BlobInput>(), ExportFormat.Pdf(), new CompilationOptions(CompilationMode.Production)));
             watch.Stop();
 
             logger.LogInformation("Certificate generated in {ElapsedMilliseconds}ms", watch.ElapsedMilliseconds);
