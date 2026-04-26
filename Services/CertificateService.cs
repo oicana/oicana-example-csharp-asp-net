@@ -4,7 +4,6 @@ using System.Text.Json.Nodes;
 using Oicana.Config;
 using Oicana.Example.Models;
 using Oicana.Inputs;
-using Oicana.Template;
 
 namespace Oicana.Example.Services;
 

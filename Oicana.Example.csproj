@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -24,13 +24,14 @@
         </When>
         <Otherwise>
             <ItemGroup>
-                <PackageReference Include="Oicana" Version="0.1.0-alpha.11" />
+                <PackageReference Include="Oicana" Version="0.1.0-alpha.12" />
             </ItemGroup>
         </Otherwise>
     </Choose>
 
     <ItemGroup>
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0" />
+        <PackageReference Include="Scalar.AspNetCore" Version="2.14.4" />
     </ItemGroup>
 
 </Project>

@@ -5,7 +5,7 @@ Small example service that uses Oicana for PDF templating.
 ## Getting Started
 
 1. Start the service: `dotnet run`
-2. Visit http://localhost:3002/swagger for the Swagger documentation
+2. Visit http://localhost:3002/scalar for the Scalar API documentation
 
 ## Licensing
 

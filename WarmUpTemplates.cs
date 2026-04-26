@@ -1,5 +1,3 @@
-using Oicana.Template;
-
 namespace Oicana.Example;
 
 /// <summary>

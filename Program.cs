@@ -1,18 +1,12 @@
-using System.Reflection;
+using Oicana;
 using Oicana.Example;
 using Oicana.Example.Services;
-using Oicana.Template;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
-{
-    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    c.IncludeXmlComments(xmlPath);
-});
+builder.Services.AddOpenApi();
 builder.Services.AddSingleton<IOicanaService, OicanaService>();
 builder.Services.AddScoped<ITemplatingService, TemplatingService>()
     .AddScoped<ICertificateService, CertificateService>()
@@ -44,8 +38,8 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.MapOpenApi();
+    app.MapScalarApiReference();
 }
 
 app.UseCors("AllowAll");
@@ -54,6 +48,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.MapGet("/", () => Results.Content("Visit the swagger documentation at <a href=\"/swagger\">/swagger</a>", "text/html")).ExcludeFromDescription();
+app.MapGet("/", () => Results.Content("Visit the API documentation at <a href=\"/scalar\">/scalar</a>", "text/html")).ExcludeFromDescription();
 
 app.Run();
