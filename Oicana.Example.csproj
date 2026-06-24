@@ -24,7 +24,7 @@
         </When>
         <Otherwise>
             <ItemGroup>
-                <PackageReference Include="Oicana" Version="0.3.0" />
+                <PackageReference Include="Oicana" Version="0.4.0-rc.2" />
             </ItemGroup>
         </Otherwise>
     </Choose>
