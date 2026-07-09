@@ -46,7 +46,7 @@ public class PdfTemplatingController(ILogger<PdfTemplatingController> logger, IT
         {
             string unescapedMessage = Regex.Unescape(e.Message);
             logger.LogError(unescapedMessage);
-            return StatusCode(400);
+            return Problem(detail: unescapedMessage, statusCode: 400);
         }
     }
 
@@ -81,7 +81,7 @@ public class PdfTemplatingController(ILogger<PdfTemplatingController> logger, IT
         {
             string unescapedMessage = Regex.Unescape(e.Message);
             logger.LogError(unescapedMessage);
-            return StatusCode(400);
+            return Problem(detail: unescapedMessage, statusCode: 400);
         }
     }
 
